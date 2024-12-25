@@ -113,6 +113,21 @@ public:
         traverse(rootNode);
         cout << endl;
     }
+    int depth(Node* node){
+        if(isRoot(node)) return 0;
+        return 1 + depth(node->parent);
+    }
+    int height(Node* node){
+        if (node == nullptr) return 0;
+        if (isExternal(node)) return 0; // Leaf node has height 0
+
+        int maxHeight = 0;
+        for (Node* child : node->children) {
+            maxHeight = max(maxHeight, height(child));
+        }
+
+        return 1 + maxHeight;
+    }
 };
 
 void menu() {
@@ -124,9 +139,10 @@ void menu() {
         cout << "1. Add Root\n";
         cout << "2. Add Child\n";
         cout << "3. Display Tree\n";
-        cout << "4. Find Node\n";
-        cout << "5. Check Properties (isInternal, isExternal, isRoot)\n";
-        cout << "6. Exit\n";
+        cout << "4. Search Node\n";
+        cout << "5. Check depth and height\n";
+        cout << "6. Check Properties (isInternal, isExternal, isRoot)\n";
+        cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -187,7 +203,24 @@ void menu() {
                 }
                 break;
             }
-            case 5: {
+            case 5:{
+                if (tree.isEmpty()) {
+                    cout << "Tree is empty.\n";
+                }else {
+                    string nodeValue;
+                    cout << "Enter node value: ";
+                    cin >> nodeValue;
+                    Node* node = tree.find(nodeValue);
+                    if (node) {
+                        cout << "depth: " << tree.depth(node) << endl;
+                        cout << "height: " << tree.height(node) << endl;
+                    } else {
+                        cout << "Node not found.\n";
+                    }
+                }
+                break;
+            }
+            case 6: {
                 if (tree.isEmpty()) {
                     cout << "Tree is empty.\n";
                 } else {
@@ -205,7 +238,7 @@ void menu() {
                 }
                 break;
             }
-            case 6: {
+            case 7: {
                 cout << "Exiting...\n";
                 break;
             }
