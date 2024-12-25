@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <string>
 using namespace std;
 
@@ -61,7 +62,6 @@ public:
         return parent(node, current->right);
     }
 
-
     Node* leftChild(Node* node) const {
         return node->left;
     }
@@ -86,20 +86,51 @@ public:
         size++;
     }
 
-    void traverse(Node* node) const {
-        if (node == nullptr) return;
-        cout << node->value << " ";
-        traverse(node->left);
-        traverse(node->right);
+    // Pre-order traversal
+    void preOrder(Node* root) const {
+        if (root == nullptr) return;
+
+        cout << root->value << " ";
+        preOrder(root->left);
+        preOrder(root->right);
     }
 
+    // Post-order traversal
+    void postOrder(Node* root) const {
+        if (root == nullptr) return;
+        postOrder(root->left);
+        postOrder(root->right);
+        cout << root->value << " ";
+    }
+
+    // In-order traversal
+    void inOrder(Node* root) const {
+        if (root == nullptr) return;
+        inOrder(root->left);
+        cout << root->value << " ";
+        inOrder(root->right);
+    }
+
+    // Level-order traversal (Breadth-First Search)
+    void levelOrder(Node* root) const {
+        queue<Node*> q;
+        q.push(root);
+        while (!q.empty()) {
+            Node* curr = q.front();
+            q.pop();
+            cout << curr->value << " ";
+            if (curr->left != nullptr) q.push(curr->left);
+            if (curr->right != nullptr) q.push(curr->right);
+        }
+    }
+
+    // Traverse and print tree (Pre-order traversal)
     void positions() const {
-        traverse(root);
+        preOrder(root);
         cout << endl;
     }
 
     int depth(Node* node) const {
-        // Find the depth recursively by traversing the parent nodes.
         int depth = 0;
         Node* current = root;
         while (current != nullptr && current->value != node->value) {
@@ -133,7 +164,11 @@ void menu() {
         cout << "4. Display Tree\n";
         cout << "5. Search Node\n";
         cout << "6. Check Depth and Height\n";
-        cout << "7. Exit\n";
+        cout << "7. Pre-order Traversal\n";
+        cout << "8. In-order Traversal\n";
+        cout << "9. Post-order Traversal\n";
+        cout << "10. Level-order Traversal\n";
+        cout << "11. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -231,6 +266,46 @@ void menu() {
                 break;
             }
             case 7: {
+                if (tree.isEmpty()) {
+                    cout << "Tree is empty.\n";
+                } else {
+                    cout << "Pre-order traversal: ";
+                    tree.preOrder(tree.getRoot());
+                    cout << endl;
+                }
+                break;
+            }
+            case 8: {
+                if (tree.isEmpty()) {
+                    cout << "Tree is empty.\n";
+                } else {
+                    cout << "In-order traversal: ";
+                    tree.inOrder(tree.getRoot());
+                    cout << endl;
+                }
+                break;
+            }
+            case 9: {
+                if (tree.isEmpty()) {
+                    cout << "Tree is empty.\n";
+                } else {
+                    cout << "Post-order traversal: ";
+                    tree.postOrder(tree.getRoot());
+                    cout << endl;
+                }
+                break;
+            }
+            case 10: {
+                if (tree.isEmpty()) {
+                    cout << "Tree is empty.\n";
+                } else {
+                    cout << "Level-order traversal: ";
+                    tree.levelOrder(tree.getRoot());
+                    cout << endl;
+                }
+                break;
+            }
+            case 11: {
                 cout << "Exiting...\n";
                 break;
             }
@@ -238,7 +313,7 @@ void menu() {
                 cout << "Invalid choice. Try again.\n";
             }
         }
-    } while (choice != 7);
+    } while (choice != 11);
 }
 
 int main() {
